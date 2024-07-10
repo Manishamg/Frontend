@@ -1,0 +1,23 @@
+pipeline{
+    agent any
+    stages {
+        stage ("clone"){
+            steps{
+                checkout scm
+            }
+        }
+        stage ("deploy"){
+            steps {
+                sh "sudo cp /var/lib/jenkins/workspace/apache/index.html /var/www/html/"
+            }
+        }
+    }
+    post{
+        success {
+            echo "success"
+        }
+        failure {
+            echo "failure"
+        }
+    }
+}
