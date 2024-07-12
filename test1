@@ -1,23 +1,28 @@
-pipeline{
+pipeline {
     agent any
     stages {
-        stage ("clone"){
-            steps{
-                checkout scm
-            }
-        }
-        stage ("deploy"){
+        stage('Checkout') {
             steps {
-                sh "sudo cp /var/lib/jenkins/workspace/apache/index.html /var/www/html/"
+                git url: 'https://github.com/Manishamg/Frontend.git', branch: 'main'
             }
         }
-    }
-    post{
-        success {
-            echo "success"
+        stage('Build') {
+            steps {
+                // Add build steps here if needed
+            }
         }
-        failure {
-            echo "failure"
+        stage('Deploy') {
+            steps {
+                sshagent(['SSH_GITHUB']) {
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ec2-user@54.163.22.206 << EOF
+                    cd /var/www/html
+                    git clone https://github.com/Manishamg/Frontend.git .
+                    sudo systemctl restart httpd
+                    EOF
+                    '''
+                }
+            }
         }
     }
 }
