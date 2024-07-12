@@ -14,6 +14,7 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no ec2-user@54.163.22.206 << EOF
                     echo "SSH login successful. Changing directory to /var/www/html..."
                     cd /var/www/html
+                    sudo npm install --force
                     echo "Removing existing files..."
                     sudo rm -rf *
                     echo "Cloning repository..."
