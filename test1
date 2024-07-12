@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/Manishamg/Frontend.git', branch: 'main'
+                git url: 'https://github.com/Manishamg/Project_J.git', branch: 'main'
             }
         }
         stage('Deploy') {
@@ -19,7 +19,7 @@ pipeline {
                     echo "Removing existing files..."
                     sudo rm -rf *
                     echo "Cloning repository..."
-                    sudo git clone https://github.com/Manishamg/Frontend.git .
+                    sudo git clone https://github.com/Manishamg/Project_J.git .
                     echo "Restarting httpd service..."
                     sudo systemctl restart httpd
                     echo "Deployment completed."
