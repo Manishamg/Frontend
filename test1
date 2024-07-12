@@ -14,7 +14,7 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/id_rsa ec2-user@3.82.20.227 << EOF
                     echo "SSH login successful. Changing directory to /var/www/html..."
                     cd /var/www/html
-                    sudo npm install --force
+                    //sudo npm install --force
                     echo "Removing existing files..."
                     sudo rm -rf *
                     echo "Cloning repository..."
