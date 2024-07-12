@@ -11,7 +11,7 @@ pipeline {
                 sshagent(['SSH_GITHUB']) {
                     sh '''
                     echo "Starting SSH into EC2 instance..."
-                    ssh -o StrictHostKeyChecking=no ec2-user@54.163.22.206 << EOF
+                    ssh -o StrictHostKeyChecking=no ec2-user@3.82.20.227 << EOF
                     echo "SSH login successful. Changing directory to /var/www/html..."
                     cd /var/www/html
                     sudo npm install --force
