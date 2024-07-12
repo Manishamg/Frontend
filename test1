@@ -11,17 +11,18 @@ pipeline {
                 sshagent(['SSH_GITHUB']) {
                     sh '''
                     echo "Starting SSH into EC2 instance..."
-                    ssh -o StrictHostKeyChecking=no ec2-user@3.82.20.227 << EOF
+                    ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/id_rsa ec2-user@3.82.20.227 << EOF
                     echo "SSH login successful. Changing directory to /var/www/html..."
                     cd /var/www/html
                     sudo npm install --force
                     echo "Removing existing files..."
                     sudo rm -rf *
                     echo "Cloning repository..."
-                    git clone https://github.com/Manishamg/Frontend.git .
+                    sudo git clone https://github.com/Manishamg/Frontend.git .
                     echo "Restarting httpd service..."
                     sudo systemctl restart httpd
                     echo "Deployment completed."
+                    exit
                     EOF
                     '''
                 }
