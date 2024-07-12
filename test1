@@ -6,19 +6,21 @@ pipeline {
                 git url: 'https://github.com/Manishamg/Frontend.git', branch: 'main'
             }
         }
-     /*  // stage('Build') {
-         //   steps {
-                // Add build steps here if needed
-            }
-        } */
         stage('Deploy') {
             steps {
                 sshagent(['SSH_GITHUB']) {
                     sh '''
+                    echo "Starting SSH into EC2 instance..."
                     ssh -o StrictHostKeyChecking=no ec2-user@54.163.22.206 << EOF
+                    echo "SSH login successful. Changing directory to /var/www/html..."
                     cd /var/www/html
+                    echo "Removing existing files..."
+                    sudo rm -rf *
+                    echo "Cloning repository..."
                     git clone https://github.com/Manishamg/Frontend.git .
+                    echo "Restarting httpd service..."
                     sudo systemctl restart httpd
+                    echo "Deployment completed."
                     EOF
                     '''
                 }
