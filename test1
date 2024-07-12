@@ -6,11 +6,11 @@ pipeline {
                 git url: 'https://github.com/Manishamg/Frontend.git', branch: 'main'
             }
         }
-        stage('Build') {
-            steps {
+     /*  // stage('Build') {
+         //   steps {
                 // Add build steps here if needed
             }
-        }
+        } */
         stage('Deploy') {
             steps {
                 sshagent(['SSH_GITHUB']) {
