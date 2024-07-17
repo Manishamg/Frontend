@@ -1,33 +1,29 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                git url: 'https://github.com/Manishamg/Project_J.git', branch: 'main'
+                git branch: 'main', url: 'https://github.com/Manishamg/Frontend.git'
             }
         }
-        stage('Deploy') {
+        stage('Build and Deploy') {
             steps {
-                sshagent(['SSH_GITHUB']) {
-                    sh '''
-                    echo "Starting SSH into EC2 instance..."
-                    ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/id_rsa ec2-user@3.82.20.227 << EOF
-                    echo "SSH login successful. Changing directory to /var/www/html..."
-                    cd /var/www/html
-                    echo "npm installation command"
-                    sudo npm install --force
-                    echo "Removing existing files..."
-                    sudo rm -rf *
-                    echo "Copying repository..."
-                    sudo cp /var/lib/jenkins/Frontend_J/audit_client .
-                    echo "Restarting httpd service..."
-                    sudo systemctl restart httpd
-                    echo "Deployment completed."
-                    exit
-                    EOF
-                    '''
+                script {
+                    // Create a directory for the application
+                    sh 'sudo mkdir -p /var/www/html/frontend'
+                    // Copy the application files to the Apache document root
+                    sh 'sudo cp -r * /var/www/html/frontend/'
+                    // Set the correct permissions
+                    sh 'sudo chown -R apache:apache /var/www/html/frontend'
+                    sh 'sudo chmod -R 755 /var/www/html/frontend'
+                    // Restart Apache to apply changes
+                    sh 'sudo systemctl restart httpd'
                 }
             }
         }
+    }
+    post {
+        always {
+            echo "end of pipeline"
     }
 }
